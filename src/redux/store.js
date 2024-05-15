@@ -9,6 +9,7 @@
 //   },
 // });
 
+import { nanoid } from "nanoid";
 import { createStore } from "redux";
 
 export const addContact = (item) => {
@@ -18,17 +19,17 @@ export const addContact = (item) => {
   };
 };
 
-export const deleteContact = (item) => {
+export const deleteContact = (id) => {
   return {
     type: "items/deleteContact",
-    payload: item,
+    payload: { id },
   };
 };
 
-export const changeFilter = (item) => {
+export const changeFilter = (query) => {
   return {
     type: "items/changeFilter",
-    payload: item,
+    payload: query,
   };
 };
 
@@ -46,17 +47,45 @@ const initialState = {
   },
 };
 
-export const selectName = (state) => state.filters.name;
+export const usersQuery = (state) => state.filters.name;
 
 const rootReducer = (state = initialState, action) => {
-  //   console.log(action);
+  console.log(action);
   switch (action.type) {
-    case "items/addContact":
+    case "items/addContact": {
+      const newItems = {
+        id: nanoid(),
+        ...action.payload,
+      };
       return {
+        ...state,
         contacts: {
-          items: action.payload,
+          ...state.contacts,
+          items: [...state.contacts.items, newItems],
         },
       };
+    }
+    case "items/deleteContact": {
+      const newItems = state.contacts.items.filter(
+        (item) => item.id !== action.payload.id
+      );
+      return {
+        ...state,
+        contacts: {
+          ...state.contacts,
+          items: newItems,
+        },
+      };
+    }
+    case "items/changeFilter": {
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          name: action.payload,
+        },
+      };
+    }
     default:
       return state;
   }
