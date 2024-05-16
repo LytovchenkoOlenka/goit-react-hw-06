@@ -4,20 +4,23 @@ import { useSelector } from "react-redux";
 
 export default function ContactList() {
   const contacts = useSelector((state) => state.contacts.items);
-  const searchQuery = useSelector((state) => state.filters);
-  // console.log(searchQuery);
+  const searchQuery = useSelector((state) => state.filters.name);
 
   const filtredContacts = contacts.filter((contact) =>
-    contact.name.toLowerCase().includes(searchQuery.name.toLowerCase())
+    contact.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <ul className={css.list}>
-      {filtredContacts.map((contact) => (
-        <li className={css.item} key={contact.id}>
-          <Contact data={contact} />
-        </li>
-      ))}
+      {filtredContacts.length !== 0 ? (
+        filtredContacts.map((contact) => (
+          <li className={css.item} key={contact.id}>
+            <Contact data={contact} />
+          </li>
+        ))
+      ) : (
+        <p>No contacts found</p>
+      )}
     </ul>
   );
 }

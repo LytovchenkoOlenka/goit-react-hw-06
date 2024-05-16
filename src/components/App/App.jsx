@@ -14,11 +14,3 @@ export default function App() {
     </div>
   );
 }
-
-// {
-//   visibleContacts.length !== 0 ? (
-//     <ContactList contacts={visibleContacts} onDelete={deleteContact} />
-//   ) : (
-//     <p>No contacts found</p>
-//   );
-// }
